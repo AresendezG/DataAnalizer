@@ -75,6 +75,7 @@ namespace ELB_LogAnalyzer
                 if (!UniqueTestNames.Contains(testname)) // The testname already contains the testname to check?
                 {
                     DGrid1.Rows.Add(testname);
+                    UniqueTestNames = ExtendedFunctions.Append(UniqueTestNames, testname);
                     //break;
                 }
                 // Manipulate individual rows and columns?
@@ -87,7 +88,7 @@ namespace ELB_LogAnalyzer
             int rowIndex = -1;
             DataGridViewRow row = DGrid1.Rows
                 .Cast<DataGridViewRow>()
-                .Where(r => r.Cells["name"].Value.ToString().Equals(testname))
+                .Where(r => r.Cells["testname"].Value.ToString().Equals(testname))
                 .First();
 
             rowIndex = row.Index;

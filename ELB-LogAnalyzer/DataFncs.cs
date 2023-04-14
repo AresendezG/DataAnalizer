@@ -65,8 +65,8 @@ namespace ELB_LogAnalyzer
                         ElementsInLine = line.Split(',');
                         if (Convert.ToDecimal(ElementsInLine[2]) != 0) // This is a numeric result
                         {
-                            ExtendedFunctions.Append(test, ElementsInLine[1]);
-                            ExtendedFunctions.Append(result, ElementsInLine[2]);
+                            test = ExtendedFunctions.Append(test, ElementsInLine[1]);
+                            result = ExtendedFunctions.Append(result, ElementsInLine[2]);
                         }
                     }
                     catch // Ignore unauthorized index exception  
