@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
+using System.Net.NetworkInformation;
 
 namespace ELB_LogAnalyzer
 {
@@ -47,6 +49,60 @@ namespace ELB_LogAnalyzer
 
         }
 
+        public static decimal GetRowAverage(DataGridViewRow row)
+        {
+            int rowcount = row.Cells.Count;
+            decimal sum = 0;
+            decimal value = 0;
+            int validresultcount = 0;
+            // sum all values in the row:
+            for (int i = 1; i < rowcount; i++)
+            {
+                if (row.Cells[i].Value != null)
+                {
+                    value = Convert.ToDecimal(row.Cells[i].Value);
+                    sum = sum + value;
+                    validresultcount++;
+                }
+            }
+
+            return sum / validresultcount;
+        }
+
+        public static double GetRowsStdDev(DataGridViewRow row, double average)
+        {
+
+            /*               
+                Step 1: Find the mean.
+                Step 2: For each data point, find the square of its distance to the mean.
+                Step 3: Sum the values from Step 2.
+                Step 4: Divide by the number of data points.
+                Step 5: Take the square root.             
+             */
+
+            int rowcount = row.Cells.Count;
+            int validresultscount = 0;
+            double dev_sum = 0;
+            double cell_val;
+            double dist;
+            double stdev;
+
+            for (int i = 1; i < rowcount; i++)
+            {
+                if (row.Cells[i].Value != null) // Cell is not empty
+                {
+                    cell_val = Convert.ToDouble(row.Cells[i].Value);
+                    dist = Math.Pow((cell_val - average),2); // step2
+                    dev_sum = dev_sum + dist; //step 3
+                    validresultscount++; // not all cells in the grid will have data
+                }
+            }
+            stdev = dev_sum / validresultscount; // step 4
+            stdev = Math.Sqrt(stdev); // step 5
+            return stdev;
+
+        }
+
         public static string[][] GetOnlyNumericTests(string filepath)
         {
             string[] test = { };
@@ -63,10 +119,11 @@ namespace ELB_LogAnalyzer
                     {
                         //Is it numeric?
                         ElementsInLine = line.Split(',');
-                        if (Convert.ToDecimal(ElementsInLine[2]) != 0) // This is a numeric result
+                        // TestResult[0],Testname[1],HighLimit[2],Measurement[3],LowLimit[4]
+                        if (Convert.ToDecimal(ElementsInLine[3]) != 0) // This is the numeric result
                         {
                             test = ExtendedFunctions.Append(test, ElementsInLine[1]);
-                            result = ExtendedFunctions.Append(result, ElementsInLine[2]);
+                            result = ExtendedFunctions.Append(result, ElementsInLine[3]); //[3] is the numeric result
                         }
                     }
                     catch // Ignore unauthorized index exception  

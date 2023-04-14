@@ -17,6 +17,7 @@ namespace ELB_LogAnalyzer
         public string[] SelectedFiles { get; set; }
         public string[] UniqueTestNames { get; set; }
         private string[][] FileandSerialsGrid { get; set; }        
+        private string[][] TestAndResultsGrid { get; set; }
         
         public Form1()
         {
@@ -25,13 +26,30 @@ namespace ELB_LogAnalyzer
             UniqueTestNames = new string[] { };
         }
 
+        /*// Form Load fnc
+         * */
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Units_Label.Text = string.Empty;
+            Models_Label.Text = string.Empty;   
+        }
+
         /*Functions of the form*/
         private void OpenFile_Btn_Click(object sender, EventArgs e)
         {
+            
             OpenFileDiagMain.ShowDialog(this);
             SelectedFiles = OpenFileDiagMain.FileNames; // Get the array of files to be parsed
+            Units_Label.Text = SelectedFiles.Length.ToString();
+
+            // Link each serial number with the file path
             FileandSerialsGrid = DataFncs.LinkSerialstoFiles(SelectedFiles, "SN: ");
+            // Create the datagrid view
             CreatingDataView(FileandSerialsGrid);
+            // Calculate the statistics of the data:
+            LogStatistics();
+            // Add statistics to the row
+
 
         }
 
@@ -55,14 +73,15 @@ namespace ELB_LogAnalyzer
                 LogNewTestRow(test_array); // This will create the new row if needed
                 foreach (string result in test_array[1])
                 {
-                    TestRow = FindTestRow(test_array[0][loop_2]);
+                    TestRow = FindTestRow(test_array[0][loop_2]); // Find the right place to put the data on the DGrid
                     DGrid1.CurrentCell = this.DGrid1[serial, TestRow]; //select that cell for the given 
-                    DGrid1.CurrentCell.Value = result;
-                    loop_2++;
+                    DGrid1.CurrentCell.Value = result; //Update cell value
+                    loop_2++; //Increase counter
                 }
                 loop_1++;
             }
 
+            // return test_array;
         }
 
         /*Logs the result of the file into a new row*/
@@ -81,6 +100,34 @@ namespace ELB_LogAnalyzer
                 // Manipulate individual rows and columns?
             }
         }
+
+        private void LogStatistics()
+        {
+            decimal avg;
+            double stdev;
+            //Define the new row
+            DataGridViewColumn avgcol = ExtendedFunctions.DefineNewColumn("Average");
+            DataGridViewColumn stdevcol = ExtendedFunctions.DefineNewColumn("StdDev");
+
+            DGrid1.Columns.Add(avgcol);
+            DGrid1.Columns.Add(stdevcol);
+            //calculate first the averages 
+            foreach (DataGridViewRow row in DGrid1.Rows)
+            {
+                if (row.Cells.Count > 0 && row.Cells[0].Value != null)
+                {
+                    avg = DataFncs.GetRowAverage(row);
+                    stdev = DataFncs.GetRowsStdDev(row, Convert.ToDouble(avg));
+                    // Add the average cell
+                    DGrid1.CurrentCell = DGrid1["Average", row.Index];
+                    DGrid1.CurrentCell.Value = avg.ToString();
+                    // add the std cell
+                    DGrid1.CurrentCell = DGrid1["StdDev", row.Index];
+                    DGrid1.CurrentCell.Value = stdev.ToString();
+                }
+            }
+        }
+
 
 
         private int FindTestRow(string testname)
