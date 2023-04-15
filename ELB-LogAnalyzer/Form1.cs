@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
 
 namespace ELB_LogAnalyzer
@@ -15,7 +16,11 @@ namespace ELB_LogAnalyzer
     public partial class Form1 : Form
     {
         public string[] SelectedFiles { get; set; }
+        // Holds a unique list of test names and their High/Low limit 
         public string[] UniqueTestNames { get; set; }
+        public string[] LowLimits { get; set; }
+        public string[] HighLimits { get; set; }
+        public string[] UniqueSerialNumbers { get; set; }
         private string[][] FileandSerialsGrid { get; set; }        
         private string[][] TestAndResultsGrid { get; set; }
         
@@ -24,6 +29,9 @@ namespace ELB_LogAnalyzer
             InitializeComponent();
             // Initialize UniqueTestNames List
             UniqueTestNames = new string[] { };
+            LowLimits = new string[] { };
+            HighLimits = new string[] { };
+            UniqueSerialNumbers = new string[] { };
         }
 
         /*// Form Load fnc
@@ -44,6 +52,8 @@ namespace ELB_LogAnalyzer
 
             // Link each serial number with the file path
             FileandSerialsGrid = DataFncs.LinkSerialstoFiles(SelectedFiles, "SN: ");
+            // Create Unique serial number for each filepath (if one or more is repeated then replace it with a unique id ext)
+            FileandSerialsGrid = DataFncs.UniqueSerialIDs(FileandSerialsGrid);
             // Create the datagrid view
             CreatingDataView(FileandSerialsGrid);
             // Calculate the statistics of the data:
@@ -88,16 +98,30 @@ namespace ELB_LogAnalyzer
 
         private void LogNewTestRow(string[][] test_grid) // Testgrid is a 2d array with the test and the numeric result
         {
+            int count = 0;
+            // Testgrid is an array of tests and results from a single file
             foreach(string testname in test_grid[0])
             {
                 // Verify if this test already exists or not...
                 if (!UniqueTestNames.Contains(testname)) // The testname already contains the testname to check?
                 {
                     DGrid1.Rows.Add(testname);
+                    // Build an array with Testname, 
                     UniqueTestNames = ExtendedFunctions.Append(UniqueTestNames, testname);
+                    try
+                    {
+                        HighLimits = ExtendedFunctions.Append(HighLimits, test_grid[2][count]);
+                        LowLimits = ExtendedFunctions.Append(LowLimits, test_grid[3][count]);
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        HighLimits = ExtendedFunctions.Append(HighLimits, "NaN");
+                        LowLimits = ExtendedFunctions.Append(LowLimits, "NaN");
+                    }
                     //break;
                 }
                 // Manipulate individual rows and columns?
+                count++;
             }
         }
 
@@ -108,9 +132,13 @@ namespace ELB_LogAnalyzer
             //Define the new row
             DataGridViewColumn avgcol = ExtendedFunctions.DefineNewColumn("Average");
             DataGridViewColumn stdevcol = ExtendedFunctions.DefineNewColumn("StdDev");
+            DataGridViewColumn HighLim = ExtendedFunctions.DefineNewColumn("HighLimit");
+            DataGridViewColumn LowLim = ExtendedFunctions.DefineNewColumn("LowLimit");
 
             DGrid1.Columns.Add(avgcol);
             DGrid1.Columns.Add(stdevcol);
+            DGrid1.Columns.Add(HighLim);
+            DGrid1.Columns.Add(LowLim);
             //calculate first the averages 
             foreach (DataGridViewRow row in DGrid1.Rows)
             {
@@ -124,6 +152,13 @@ namespace ELB_LogAnalyzer
                     // add the std cell
                     DGrid1.CurrentCell = DGrid1["StdDev", row.Index];
                     DGrid1.CurrentCell.Value = stdev.ToString();
+                    // Add the high limit used in this test
+                    DGrid1.CurrentCell = DGrid1["HighLimit", row.Index];
+                    DGrid1.CurrentCell.Value = HighLimits[row.Index];
+                    // Add the Low Limit
+                    DGrid1.CurrentCell = DGrid1["LowLimit", row.Index];
+                    DGrid1.CurrentCell.Value = LowLimits[row.Index];
+
                 }
             }
         }

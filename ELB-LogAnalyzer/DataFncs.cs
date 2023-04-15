@@ -49,6 +49,26 @@ namespace ELB_LogAnalyzer
 
         }
 
+        public static string[][] UniqueSerialIDs(string[][] FilesAndPathsArray)
+        {
+            string[] SerialsList = { };
+            int counter = 0;
+            foreach (string serial in FilesAndPathsArray[1])
+            {
+                if (!SerialsList.Contains(serial))
+                {
+                    // include it to the list and do nothing
+                    SerialsList = ExtendedFunctions.Append(SerialsList, serial);
+                }
+                else
+                {
+                    FilesAndPathsArray[1][counter] = serial + "_rt1";
+                }
+                counter++;
+            }
+            return FilesAndPathsArray;
+        }
+
         public static decimal GetRowAverage(DataGridViewRow row)
         {
             int rowcount = row.Cells.Count;
@@ -107,6 +127,8 @@ namespace ELB_LogAnalyzer
         {
             string[] test = { };
             string[] result = { };
+            string[] LowLimit = { };
+            string[] HighLimit = { };   
             string[] LinesInFile, ElementsInLine;
 
             LinesInFile = File.ReadAllLines(filepath);
@@ -124,6 +146,8 @@ namespace ELB_LogAnalyzer
                         {
                             test = ExtendedFunctions.Append(test, ElementsInLine[1]);
                             result = ExtendedFunctions.Append(result, ElementsInLine[3]); //[3] is the numeric result
+                            HighLimit = ExtendedFunctions.Append(HighLimit, ElementsInLine[2]);
+                            LowLimit = ExtendedFunctions.Append(LowLimit, ElementsInLine[4]);
                         }
                     }
                     catch // Ignore unauthorized index exception  
@@ -133,8 +157,8 @@ namespace ELB_LogAnalyzer
             }
             try
             {
-                string[][] Output2DArray = { test, result };
-                return Output2DArray;
+                string[][] OutputArray = { test, result, HighLimit, LowLimit };
+                return OutputArray;
             }
             catch
             {
@@ -148,7 +172,7 @@ namespace ELB_LogAnalyzer
         {
             if (!TestList.Contains(TestNameToCheck)) // This testname list contains the testname to check?
             {
-                ExtendedFunctions.Append(TestList, TestNameToCheck); // if not, append it to the list
+                TestList = ExtendedFunctions.Append(TestList, TestNameToCheck); // if not, append it to the list
             }
             return TestList;
         }
