@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
+using Microsoft.SqlServer.Server;
 
 namespace ELB_LogAnalyzer
 {
@@ -19,17 +20,23 @@ namespace ELB_LogAnalyzer
             string[] ElementsInLine;
             string[] ValidPaths = { };
             string[] SerialNumbers = { };
+            string[] TestDates = { };
 
             foreach (string singleFile in Files)
             {
                 LinesInFile = File.ReadAllLines(singleFile);
                 foreach (string line in LinesInFile)
                 {
+                    ElementsInLine = line.Split(' ');
+                    if (line.StartsWith("Date:"))
+                    {
+                        TestDates = ExtendedFunctions.Append(TestDates, ElementsInLine[1]);
+                    }
                     if (line.StartsWith(SN_Identifier))
                     {
                         // This filepath is valid, add it to the array
                         ValidPaths = ExtendedFunctions.Append(ValidPaths, singleFile);
-                        ElementsInLine = line.Split(' ');
+                        //ElementsInLine = line.Split(' ');
                         // This SN is valid, add it to the array
                         SerialNumbers = ExtendedFunctions.Append(SerialNumbers, ElementsInLine[1]);
                         break; // serial number found, no need to keep looking
@@ -39,7 +46,7 @@ namespace ELB_LogAnalyzer
             }
             try
             {
-                string[][] Output2DArray = { Files, SerialNumbers };
+                string[][] Output2DArray = { Files, SerialNumbers, TestDates };
                 return Output2DArray;
             }
             catch
@@ -86,7 +93,7 @@ namespace ELB_LogAnalyzer
                 }
             }
 
-            return sum / validresultcount;
+            return Math.Round(sum / validresultcount, 4);
         }
 
         public static double GetRowsStdDev(DataGridViewRow row, double average)
@@ -119,7 +126,7 @@ namespace ELB_LogAnalyzer
             }
             stdev = dev_sum / validresultscount; // step 4
             stdev = Math.Sqrt(stdev); // step 5
-            return stdev;
+            return Math.Round(stdev,4);
 
         }
 

@@ -42,25 +42,71 @@ namespace ELB_LogAnalyzer
             Models_Label.Text = string.Empty;   
         }
 
+        private void FormatDataGrid()
+        {
+            UniqueTestNames = new string[] { };
+            LowLimits = new string[] { };
+            HighLimits = new string[] { };
+            UniqueSerialNumbers = new string[] { };
+
+            DGrid1.Rows.Clear();
+            DGrid1.Columns.Clear();
+            DataGridViewColumn tcount = ExtendedFunctions.DefineNewColumn("testcount","Test Count");
+            DataGridViewColumn tname = ExtendedFunctions.DefineNewColumn("testname","Test Name");
+
+            //DGrid1.Columns.Add(tcount);
+            DGrid1.Columns.Add(tname);
+        }
+
         /*Functions of the form*/
         private void OpenFile_Btn_Click(object sender, EventArgs e)
         {
+            DialogResult userchoice;
+            if (DGrid1.Rows.Count > 2)
+            {
+                userchoice = MessageBox.Show(
+                        "There is data already processed, you want to clear the available data?",
+                        "Open new files",
+                        MessageBoxButtons.YesNoCancel,
+                        MessageBoxIcon.Question);
+            }
+            else
+            {
+                userchoice = DialogResult.None;
+            }
+            switch (userchoice)
+            {
+
+                case DialogResult.Yes:
+                    FormatDataGrid();
+                    break;
+                case DialogResult.No:
+                    break;
+                case DialogResult.Cancel:
+                    return;
+                    break;
+                default:
+                    //FormatDataGrid();   
+                    OpenFileDiagMain.ShowDialog(this);
+                    SelectedFiles = OpenFileDiagMain.FileNames; // Get the array of files to be parsed
+                    Units_Label.Text = SelectedFiles.Length.ToString();
+
+                    // Link each serial number with the file path
+                    FileandSerialsGrid = DataFncs.LinkSerialstoFiles(SelectedFiles, "SN: ");
+                    // Create Unique serial number for each filepath (if one or more is repeated then replace it with a unique id ext)
+                    FileandSerialsGrid = DataFncs.UniqueSerialIDs(FileandSerialsGrid);
+                    // Create the datagrid view
+                    CreatingDataView(FileandSerialsGrid);
+                    // Calculate the statistics of the data:
+                    LogStatistics();
+                    // Add statistics to the row
+                    break;
+
+            }
+
+
+
             
-            OpenFileDiagMain.ShowDialog(this);
-            SelectedFiles = OpenFileDiagMain.FileNames; // Get the array of files to be parsed
-            Units_Label.Text = SelectedFiles.Length.ToString();
-
-            // Link each serial number with the file path
-            FileandSerialsGrid = DataFncs.LinkSerialstoFiles(SelectedFiles, "SN: ");
-            // Create Unique serial number for each filepath (if one or more is repeated then replace it with a unique id ext)
-            FileandSerialsGrid = DataFncs.UniqueSerialIDs(FileandSerialsGrid);
-            // Create the datagrid view
-            CreatingDataView(FileandSerialsGrid);
-            // Calculate the statistics of the data:
-            LogStatistics();
-            // Add statistics to the row
-
-
         }
 
 
@@ -73,10 +119,11 @@ namespace ELB_LogAnalyzer
             // Start with the new columns
             foreach (string serial in SelectedFilesArray[1])
             {
+                string col_txt = serial + "\n" + SelectedFilesArray[2][loop_1];
                 int loop_2 = 0;
                 int TestRow = 0;
                 //Each iteration has one serial number
-                DataGridViewColumn UUT_ResultCol = ExtendedFunctions.DefineNewColumn(serial);
+                DataGridViewColumn UUT_ResultCol = ExtendedFunctions.DefineNewColumn(serial, col_txt);
                 DGrid1.Columns.Add(UUT_ResultCol); // Column is added, now check this serial number 
                 /* Now, analyze the whole file and return a 2d array with only Testname and Measurement to populate the rows: */
                 test_array = DataFncs.GetOnlyNumericTests(SelectedFilesArray[0][loop_1]); //this parameter is the path of the file
@@ -131,7 +178,7 @@ namespace ELB_LogAnalyzer
             double stdev;
             //Define the new row
             DataGridViewColumn avgcol = ExtendedFunctions.DefineNewColumn("Average");
-            DataGridViewColumn stdevcol = ExtendedFunctions.DefineNewColumn("StdDev");
+            DataGridViewColumn stdevcol = ExtendedFunctions.DefineNewColumn("StdDev", "Standard\nDeviation");
             DataGridViewColumn HighLim = ExtendedFunctions.DefineNewColumn("HighLimit");
             DataGridViewColumn LowLim = ExtendedFunctions.DefineNewColumn("LowLimit");
 
@@ -210,6 +257,27 @@ namespace ELB_LogAnalyzer
                                 "Data Copied",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
+            }
+        }
+
+        private void cleargrid_btn_Click(object sender, EventArgs e)
+        {
+           DialogResult userchoice = MessageBox.Show(
+                 "Do you want to clear the current data grid?",
+                 "Clearing the Data Grid",
+                 MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+            if(userchoice == DialogResult.Yes)
+            {
+                FormatDataGrid();
+                MessageBox.Show("Data Cleared, Open more files to create a new data grid",
+                                 "Data Grid cleared",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                return;
             }
         }
     }

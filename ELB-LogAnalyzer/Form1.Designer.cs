@@ -40,10 +40,11 @@
             this.FileMenuBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenFile_Btn = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.OpenFileDiagMain = new System.Windows.Forms.OpenFileDialog();
             this.DataOp_Sel = new System.Windows.Forms.ToolStripMenuItem();
             this.selectall_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.copygrid_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenFileDiagMain = new System.Windows.Forms.OpenFileDialog();
+            this.cleargrid_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGrid1)).BeginInit();
@@ -58,7 +59,7 @@
             this.tableLayoutPanel1.Controls.Add(this.DGrid1, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 26);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -80,7 +81,7 @@
             this.tableLayoutPanel2.Controls.Add(this.Units_Label, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.Models_Label, 1, 1);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 24);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -137,7 +138,7 @@
             this.testname});
             this.DGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DGrid1.Location = new System.Drawing.Point(4, 130);
-            this.DGrid1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DGrid1.Margin = new System.Windows.Forms.Padding(4);
             this.DGrid1.Name = "DGrid1";
             this.DGrid1.ReadOnly = true;
             this.DGrid1.RowHeadersWidth = 62;
@@ -177,27 +178,22 @@
             // OpenFile_Btn
             // 
             this.OpenFile_Btn.Name = "OpenFile_Btn";
-            this.OpenFile_Btn.Size = new System.Drawing.Size(128, 26);
+            this.OpenFile_Btn.Size = new System.Drawing.Size(224, 26);
             this.OpenFile_Btn.Text = "Open";
             this.OpenFile_Btn.Click += new System.EventHandler(this.OpenFile_Btn_Click);
             // 
             // ExitBtn
             // 
             this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(128, 26);
+            this.ExitBtn.Size = new System.Drawing.Size(224, 26);
             this.ExitBtn.Text = "Exit";
-            // 
-            // OpenFileDiagMain
-            // 
-            this.OpenFileDiagMain.Filter = "Text Files|*.txt|CSV Files|*.csv";
-            this.OpenFileDiagMain.Multiselect = true;
-            this.OpenFileDiagMain.Title = "\"Choose the Files to Analize\"";
             // 
             // DataOp_Sel
             // 
             this.DataOp_Sel.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectall_btn,
-            this.copygrid_btn});
+            this.copygrid_btn,
+            this.cleargrid_btn});
             this.DataOp_Sel.Name = "DataOp_Sel";
             this.DataOp_Sel.Size = new System.Drawing.Size(132, 24);
             this.DataOp_Sel.Text = "Data Operations";
@@ -215,6 +211,19 @@
             this.copygrid_btn.Text = "Copy Grid";
             this.copygrid_btn.Click += new System.EventHandler(this.copygrid_btn_Click);
             // 
+            // OpenFileDiagMain
+            // 
+            this.OpenFileDiagMain.Filter = "Text Files|*.txt|CSV Files|*.csv";
+            this.OpenFileDiagMain.Multiselect = true;
+            this.OpenFileDiagMain.Title = "\"Choose the Files to Analize\"";
+            // 
+            // cleargrid_btn
+            // 
+            this.cleargrid_btn.Name = "cleargrid_btn";
+            this.cleargrid_btn.Size = new System.Drawing.Size(224, 26);
+            this.cleargrid_btn.Text = "Clear Grid";
+            this.cleargrid_btn.Click += new System.EventHandler(this.cleargrid_btn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -223,7 +232,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Test Result Data Analyzer";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -256,6 +265,7 @@
         private System.Windows.Forms.ToolStripMenuItem DataOp_Sel;
         private System.Windows.Forms.ToolStripMenuItem selectall_btn;
         private System.Windows.Forms.ToolStripMenuItem copygrid_btn;
+        private System.Windows.Forms.ToolStripMenuItem cleargrid_btn;
     }
 }
 

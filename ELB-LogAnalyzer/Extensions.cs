@@ -62,13 +62,22 @@ namespace ELB_LogAnalyzer
         }
 
         // Define a new column for a data grid view object
-        public static DataGridViewColumn DefineNewColumn(string RowName)
+        public static DataGridViewColumn DefineNewColumn(string RowName, string HeaderText = "DEFAULT_TXT")
         {
+            string Header;
+            if (HeaderText == "DEFAULT_TXT")
+            {
+                Header = RowName;
+            }
+            else
+            {
+                Header = HeaderText;
+            }
             DataGridViewCell TemplateCell = new DataGridViewTextBoxCell();
             DataGridViewColumn ReturnCol = new DataGridViewColumn
             {
                 Visible = true,
-                HeaderText = RowName,
+                HeaderText = Header,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 ReadOnly = true,
                 Name = RowName,
