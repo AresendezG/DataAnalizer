@@ -185,6 +185,32 @@ namespace ELB_LogAnalyzer
 
         }
 
+        private void copygrid_btn_Click(object sender, EventArgs e)
+        {
+            DGrid1.SelectAll();
 
+            if (this.DGrid1.GetCellCount(DataGridViewElementStates.Selected) > 0)
+            {
+                try
+                {
+                    // Add the selection to the clipboard.
+                    Clipboard.SetDataObject(DGrid1.GetClipboardContent());
+
+
+                }
+                catch (System.Runtime.InteropServices.ExternalException)
+                {
+                    MessageBox.Show("The Clipboard could not be accessed. Please try again",
+                                    "Error: Clipboard",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return;
+                }
+                MessageBox.Show("Data Copied to Clipboard",
+                                "Data Copied",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+            }
+        }
     }
 }
