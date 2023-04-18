@@ -24,29 +24,36 @@ namespace ELB_LogAnalyzer
 
             foreach (string singleFile in Files)
             {
-                LinesInFile = File.ReadAllLines(singleFile);
-                foreach (string line in LinesInFile)
+                try
                 {
-                    ElementsInLine = line.Split(' ');
-                    if (line.StartsWith("Date:"))
+                    LinesInFile = File.ReadAllLines(singleFile);
+                    foreach (string line in LinesInFile)
                     {
-                        TestDates = ExtendedFunctions.Append(TestDates, ElementsInLine[1]);
-                    }
-                    if (line.StartsWith(SN_Identifier))
-                    {
-                        // This filepath is valid, add it to the array
-                        ValidPaths = ExtendedFunctions.Append(ValidPaths, singleFile);
-                        //ElementsInLine = line.Split(' ');
-                        // This SN is valid, add it to the array
-                        SerialNumbers = ExtendedFunctions.Append(SerialNumbers, ElementsInLine[1]);
-                        break; // serial number found, no need to keep looking
+                        ElementsInLine = line.Split(' ');
+                        if (line.StartsWith("Date:"))
+                        {
+                            TestDates = ExtendedFunctions.Append(TestDates, ElementsInLine[1]);
+                        }
+                        if (line.StartsWith(SN_Identifier))
+                        {
+                            // This filepath is valid, add it to the array
+                            ValidPaths = ExtendedFunctions.Append(ValidPaths, singleFile);
+                            //ElementsInLine = line.Split(' ');
+                            // This SN is valid, add it to the array
+                            SerialNumbers = ExtendedFunctions.Append(SerialNumbers, ElementsInLine[1]);
+                            break; // serial number found, no need to keep looking
+                        }
                     }
                 }
+                catch (IOException) {
+                    
+                }
+                
 
             }
             try
             {
-                string[][] Output2DArray = { Files, SerialNumbers, TestDates };
+                string[][] Output2DArray = { ValidPaths, SerialNumbers, TestDates };
                 return Output2DArray;
             }
             catch

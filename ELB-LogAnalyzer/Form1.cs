@@ -23,6 +23,7 @@ namespace ELB_LogAnalyzer
         public string[] UniqueSerialNumbers { get; set; }
         private string[][] FileandSerialsGrid { get; set; }        
         private string[][] TestAndResultsGrid { get; set; }
+        private int FileCount;
         
         public Form1()
         {
@@ -32,6 +33,7 @@ namespace ELB_LogAnalyzer
             LowLimits = new string[] { };
             HighLimits = new string[] { };
             UniqueSerialNumbers = new string[] { };
+
         }
 
         /*// Form Load fnc
@@ -39,7 +41,9 @@ namespace ELB_LogAnalyzer
         private void Form1_Load(object sender, EventArgs e)
         {
             Units_Label.Text = string.Empty;
-            Models_Label.Text = string.Empty;   
+            Models_Label.Text = string.Empty;
+            errorfiles_lbl.Text = string.Empty;
+            correctfiles_lbl.Text = string.Empty;
         }
 
         private void FormatDataGrid()
@@ -67,7 +71,7 @@ namespace ELB_LogAnalyzer
                 userchoice = MessageBox.Show(
                         "There is data already processed, you want to clear the available data?",
                         "Open new files",
-                        MessageBoxButtons.YesNoCancel,
+                        MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
             }
             else
@@ -79,34 +83,54 @@ namespace ELB_LogAnalyzer
 
                 case DialogResult.Yes:
                     FormatDataGrid();
+                    LoadNewData();
                     break;
                 case DialogResult.No:
                     break;
-                case DialogResult.Cancel:
-                    return;
-                    break;
                 default:
-                    //FormatDataGrid();   
-                    OpenFileDiagMain.ShowDialog(this);
-                    SelectedFiles = OpenFileDiagMain.FileNames; // Get the array of files to be parsed
-                    Units_Label.Text = SelectedFiles.Length.ToString();
-
-                    // Link each serial number with the file path
-                    FileandSerialsGrid = DataFncs.LinkSerialstoFiles(SelectedFiles, "SN: ");
-                    // Create Unique serial number for each filepath (if one or more is repeated then replace it with a unique id ext)
-                    FileandSerialsGrid = DataFncs.UniqueSerialIDs(FileandSerialsGrid);
-                    // Create the datagrid view
-                    CreatingDataView(FileandSerialsGrid);
-                    // Calculate the statistics of the data:
-                    LogStatistics();
-                    // Add statistics to the row
+                    LoadNewData();
                     break;
 
+            }            
+        
+        }
+
+        private void LoadNewData()
+        {
+            //FormatDataGrid();   
+            OpenFileDiagMain.ShowDialog(this);
+            SelectedFiles = OpenFileDiagMain.FileNames; // Get the array of files to be parsed
+            if (SelectedFiles.Length > 0)
+            {
+                Units_Label.Text = SelectedFiles.Length.ToString();
+                // Link each serial number with the file path
+                FileandSerialsGrid = DataFncs.LinkSerialstoFiles(SelectedFiles, "SN: ");
+                // Create Unique serial number for each filepath (if one or more is repeated then replace it with a unique id ext)
+                FileandSerialsGrid = DataFncs.UniqueSerialIDs(FileandSerialsGrid);
+                correctfiles_lbl.Text = FileandSerialsGrid[0].Length.ToString();
+                errorfiles_lbl.Text = (SelectedFiles.Length - FileandSerialsGrid[0].Length).ToString();
+                // Create the datagrid view
+                CreatingDataView(FileandSerialsGrid);
+                // Calculate the statistics of the data:
+                LogStatistics();
+                // Add statistics to the row
+
+                if ((SelectedFiles.Length - FileandSerialsGrid[0].Length) != 0)
+                {
+                    MessageBox.Show("One or more files were not processed correctly\nVerify if they're in use by another process",
+                         "Error opening files",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }            
+            else
+            {
+                MessageBox.Show(
+                        "No files were selected to run the analysis. Please select one or more files",
+                        "No files selected",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
             }
-
-
-
-            
         }
 
 
@@ -279,6 +303,11 @@ namespace ELB_LogAnalyzer
             {
                 return;
             }
+        }
+
+        private void ExitBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

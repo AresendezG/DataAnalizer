@@ -45,6 +45,10 @@
             this.copygrid_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenFileDiagMain = new System.Windows.Forms.OpenFileDialog();
             this.cleargrid_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.correctfiles_lbl = new System.Windows.Forms.Label();
+            this.errorfiles_lbl = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGrid1)).BeginInit();
@@ -76,10 +80,14 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.label3, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.Units_Label, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.Models_Label, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.label4, 2, 1);
+            this.tableLayoutPanel2.Controls.Add(this.correctfiles_lbl, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.errorfiles_lbl, 3, 1);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 24);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -187,6 +195,7 @@
             this.ExitBtn.Name = "ExitBtn";
             this.ExitBtn.Size = new System.Drawing.Size(224, 26);
             this.ExitBtn.Text = "Exit";
+            this.ExitBtn.Click += new System.EventHandler(this.ExitBtn_Click);
             // 
             // DataOp_Sel
             // 
@@ -223,6 +232,42 @@
             this.cleargrid_btn.Size = new System.Drawing.Size(224, 26);
             this.cleargrid_btn.Text = "Clear Grid";
             this.cleargrid_btn.Click += new System.EventHandler(this.cleargrid_btn_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(413, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(82, 16);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Files Correct";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(413, 40);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(88, 16);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Files w/Errors";
+            // 
+            // correctfiles_lbl
+            // 
+            this.correctfiles_lbl.AutoSize = true;
+            this.correctfiles_lbl.Location = new System.Drawing.Point(618, 0);
+            this.correctfiles_lbl.Name = "correctfiles_lbl";
+            this.correctfiles_lbl.Size = new System.Drawing.Size(44, 16);
+            this.correctfiles_lbl.TabIndex = 5;
+            this.correctfiles_lbl.Text = "label5";
+            // 
+            // errorfiles_lbl
+            // 
+            this.errorfiles_lbl.AutoSize = true;
+            this.errorfiles_lbl.Location = new System.Drawing.Point(618, 40);
+            this.errorfiles_lbl.Name = "errorfiles_lbl";
+            this.errorfiles_lbl.Size = new System.Drawing.Size(44, 16);
+            this.errorfiles_lbl.TabIndex = 6;
+            this.errorfiles_lbl.Text = "label5";
             // 
             // Form1
             // 
@@ -266,6 +311,10 @@
         private System.Windows.Forms.ToolStripMenuItem selectall_btn;
         private System.Windows.Forms.ToolStripMenuItem copygrid_btn;
         private System.Windows.Forms.ToolStripMenuItem cleargrid_btn;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label correctfiles_lbl;
+        private System.Windows.Forms.Label errorfiles_lbl;
     }
 }
 
