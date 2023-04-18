@@ -174,7 +174,7 @@ namespace ELB_LogAnalyzer
 
         private void LogStatistics()
         {
-            decimal avg;
+            double avg;
             double stdev;
             //Define the new row
             DataGridViewColumn avgcol = ExtendedFunctions.DefineNewColumn("Average");
@@ -192,7 +192,7 @@ namespace ELB_LogAnalyzer
                 if (row.Cells.Count > 0 && row.Cells[0].Value != null)
                 {
                     avg = DataFncs.GetRowAverage(row);
-                    stdev = DataFncs.GetRowsStdDev(row, Convert.ToDouble(avg));
+                    stdev = DataFncs.GetRowsStdDev(row, avg);
                     // Add the average cell
                     DGrid1.CurrentCell = DGrid1["Average", row.Index];
                     DGrid1.CurrentCell.Value = avg.ToString();

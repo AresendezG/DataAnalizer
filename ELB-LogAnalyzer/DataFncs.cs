@@ -76,20 +76,28 @@ namespace ELB_LogAnalyzer
             return FilesAndPathsArray;
         }
 
-        public static decimal GetRowAverage(DataGridViewRow row)
+        public static double GetRowAverage(DataGridViewRow row)
         {
             int rowcount = row.Cells.Count;
-            decimal sum = 0;
-            decimal value = 0;
+            double sum = 0;
+            double value = 0;
             int validresultcount = 0;
             // sum all values in the row:
             for (int i = 1; i < rowcount; i++)
             {
                 if (row.Cells[i].Value != null)
                 {
-                    value = Convert.ToDecimal(row.Cells[i].Value);
-                    sum = sum + value;
-                    validresultcount++;
+                    try
+                    {
+                        value = Convert.ToDouble(row.Cells[i].Value);
+                        sum = sum + value;
+                        validresultcount++;
+                    }
+                    catch
+                    {
+                        sum = 1;
+                        validresultcount = 1;
+                    }
                 }
             }
 
@@ -118,10 +126,18 @@ namespace ELB_LogAnalyzer
             {
                 if (row.Cells[i].Value != null) // Cell is not empty
                 {
-                    cell_val = Convert.ToDouble(row.Cells[i].Value);
-                    dist = Math.Pow((cell_val - average),2); // step2
-                    dev_sum = dev_sum + dist; //step 3
-                    validresultscount++; // not all cells in the grid will have data
+                    try
+                    {
+                        cell_val = Convert.ToDouble(row.Cells[i].Value);
+                        dist = Math.Pow((cell_val - average), 2); // step2
+                        dev_sum = dev_sum + dist; //step 3
+                        validresultscount++; // not all cells in the grid will have data
+                    }
+                    catch
+                    {
+                        stdev = 1;
+                        validresultscount = 1;
+                    }
                 }
             }
             stdev = dev_sum / validresultscount; // step 4
@@ -149,7 +165,7 @@ namespace ELB_LogAnalyzer
                         //Is it numeric?
                         ElementsInLine = line.Split(',');
                         // TestResult[0],Testname[1],HighLimit[2],Measurement[3],LowLimit[4]
-                        if (Convert.ToDecimal(ElementsInLine[3]) != 0) // This is the numeric result
+                        if (ElementsInLine.Length > 4) // High limit is different than 0...
                         {
                             test = ExtendedFunctions.Append(test, ElementsInLine[1]);
                             result = ExtendedFunctions.Append(result, ElementsInLine[3]); //[3] is the numeric result
