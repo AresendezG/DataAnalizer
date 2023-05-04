@@ -143,7 +143,7 @@ namespace ELB_LogAnalyzer
             // Start with the new columns
             foreach (string serial in SelectedFilesArray[1])
             {
-                string col_txt = serial + "\n" + SelectedFilesArray[2][loop_1];
+                string col_txt = serial + " D:" + SelectedFilesArray[2][loop_1];
                 int loop_2 = 0;
                 int TestRow = 0;
                 //Each iteration has one serial number
@@ -202,7 +202,7 @@ namespace ELB_LogAnalyzer
             double stdev;
             //Define the new row
             DataGridViewColumn avgcol = ExtendedFunctions.DefineNewColumn("Average");
-            DataGridViewColumn stdevcol = ExtendedFunctions.DefineNewColumn("StdDev", "Standard\nDeviation");
+            DataGridViewColumn stdevcol = ExtendedFunctions.DefineNewColumn("StdDev", "Std Dev");
             DataGridViewColumn HighLim = ExtendedFunctions.DefineNewColumn("HighLimit");
             DataGridViewColumn LowLim = ExtendedFunctions.DefineNewColumn("LowLimit");
 
