@@ -76,7 +76,7 @@ namespace ELB_LogAnalyzer
                 }
                 else
                 {
-                    FilesAndPathsArray[1][counter] = serial + "_rt1";
+                    FilesAndPathsArray[1][counter] = serial + "_rt"+counter.ToString();
                 }
                 counter++;
             }
