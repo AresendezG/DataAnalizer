@@ -30,10 +30,14 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.Units_Label = new System.Windows.Forms.Label();
             this.Models_Label = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.correctfiles_lbl = new System.Windows.Forms.Label();
+            this.errorfiles_lbl = new System.Windows.Forms.Label();
             this.DGrid1 = new System.Windows.Forms.DataGridView();
             this.testname = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -43,12 +47,9 @@
             this.DataOp_Sel = new System.Windows.Forms.ToolStripMenuItem();
             this.selectall_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.copygrid_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.OpenFileDiagMain = new System.Windows.Forms.OpenFileDialog();
             this.cleargrid_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.correctfiles_lbl = new System.Windows.Forms.Label();
-            this.errorfiles_lbl = new System.Windows.Forms.Label();
+            this.OpenFileDiagMain = new System.Windows.Forms.OpenFileDialog();
+            this.maskfails_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGrid1)).BeginInit();
@@ -97,6 +98,15 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(823, 81);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(413, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(82, 16);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Files Correct";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -136,6 +146,33 @@
             this.Models_Label.Size = new System.Drawing.Size(44, 16);
             this.Models_Label.TabIndex = 3;
             this.Models_Label.Text = "label4";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(413, 40);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(88, 16);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Files w/Errors";
+            // 
+            // correctfiles_lbl
+            // 
+            this.correctfiles_lbl.AutoSize = true;
+            this.correctfiles_lbl.Location = new System.Drawing.Point(618, 0);
+            this.correctfiles_lbl.Name = "correctfiles_lbl";
+            this.correctfiles_lbl.Size = new System.Drawing.Size(44, 16);
+            this.correctfiles_lbl.TabIndex = 5;
+            this.correctfiles_lbl.Text = "label5";
+            // 
+            // errorfiles_lbl
+            // 
+            this.errorfiles_lbl.AutoSize = true;
+            this.errorfiles_lbl.Location = new System.Drawing.Point(618, 40);
+            this.errorfiles_lbl.Name = "errorfiles_lbl";
+            this.errorfiles_lbl.Size = new System.Drawing.Size(44, 16);
+            this.errorfiles_lbl.TabIndex = 6;
+            this.errorfiles_lbl.Text = "label5";
             // 
             // DGrid1
             // 
@@ -186,14 +223,14 @@
             // OpenFile_Btn
             // 
             this.OpenFile_Btn.Name = "OpenFile_Btn";
-            this.OpenFile_Btn.Size = new System.Drawing.Size(224, 26);
+            this.OpenFile_Btn.Size = new System.Drawing.Size(128, 26);
             this.OpenFile_Btn.Text = "Open";
             this.OpenFile_Btn.Click += new System.EventHandler(this.OpenFile_Btn_Click);
             // 
             // ExitBtn
             // 
             this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(224, 26);
+            this.ExitBtn.Size = new System.Drawing.Size(128, 26);
             this.ExitBtn.Text = "Exit";
             this.ExitBtn.Click += new System.EventHandler(this.ExitBtn_Click);
             // 
@@ -202,7 +239,8 @@
             this.DataOp_Sel.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectall_btn,
             this.copygrid_btn,
-            this.cleargrid_btn});
+            this.cleargrid_btn,
+            this.maskfails_btn});
             this.DataOp_Sel.Name = "DataOp_Sel";
             this.DataOp_Sel.Size = new System.Drawing.Size(132, 24);
             this.DataOp_Sel.Text = "Data Operations";
@@ -220,12 +258,6 @@
             this.copygrid_btn.Text = "Copy Grid";
             this.copygrid_btn.Click += new System.EventHandler(this.copygrid_btn_Click);
             // 
-            // OpenFileDiagMain
-            // 
-            this.OpenFileDiagMain.Filter = "Text Files|*.txt|CSV Files|*.csv";
-            this.OpenFileDiagMain.Multiselect = true;
-            this.OpenFileDiagMain.Title = "\"Choose the Files to Analize\"";
-            // 
             // cleargrid_btn
             // 
             this.cleargrid_btn.Name = "cleargrid_btn";
@@ -233,41 +265,18 @@
             this.cleargrid_btn.Text = "Clear Grid";
             this.cleargrid_btn.Click += new System.EventHandler(this.cleargrid_btn_Click);
             // 
-            // label3
+            // OpenFileDiagMain
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(413, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 16);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Files Correct";
+            this.OpenFileDiagMain.Filter = "Text Files|*.txt|CSV Files|*.csv";
+            this.OpenFileDiagMain.Multiselect = true;
+            this.OpenFileDiagMain.Title = "\"Choose the Files to Analize\"";
             // 
-            // label4
+            // maskfails_btn
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(413, 40);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 16);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Files w/Errors";
-            // 
-            // correctfiles_lbl
-            // 
-            this.correctfiles_lbl.AutoSize = true;
-            this.correctfiles_lbl.Location = new System.Drawing.Point(618, 0);
-            this.correctfiles_lbl.Name = "correctfiles_lbl";
-            this.correctfiles_lbl.Size = new System.Drawing.Size(44, 16);
-            this.correctfiles_lbl.TabIndex = 5;
-            this.correctfiles_lbl.Text = "label5";
-            // 
-            // errorfiles_lbl
-            // 
-            this.errorfiles_lbl.AutoSize = true;
-            this.errorfiles_lbl.Location = new System.Drawing.Point(618, 40);
-            this.errorfiles_lbl.Name = "errorfiles_lbl";
-            this.errorfiles_lbl.Size = new System.Drawing.Size(44, 16);
-            this.errorfiles_lbl.TabIndex = 6;
-            this.errorfiles_lbl.Text = "label5";
+            this.maskfails_btn.Name = "maskfails_btn";
+            this.maskfails_btn.Size = new System.Drawing.Size(224, 26);
+            this.maskfails_btn.Text = "Mask Failures";
+            this.maskfails_btn.Click += new System.EventHandler(this.maskfails_btn_Click);
             // 
             // Form1
             // 
@@ -315,6 +324,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label correctfiles_lbl;
         private System.Windows.Forms.Label errorfiles_lbl;
+        private System.Windows.Forms.ToolStripMenuItem maskfails_btn;
     }
 }
 

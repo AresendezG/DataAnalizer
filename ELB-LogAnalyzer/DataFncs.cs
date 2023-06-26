@@ -207,6 +207,53 @@ namespace ELB_LogAnalyzer
             return TestList;
         }
 
+        // Requires a row that also has defined high and low limit
+        public static DataGridViewRow mask_failures(DataGridViewRow row)
+        {
+            int count = 0;
+            DataGridViewRow masked_row = row;
+            try
+            {
+                int cell_count = row.Cells.Count;
+                double low_limit = Convert.ToDouble(row.Cells["LowLimit"].Value);
+                double high_limit = Convert.ToDouble(row.Cells["HighLimit"].Value);
+
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+
+                    if (count >= cell_count - 4)
+                    {
+                        break;
+                    }
+
+                    try
+                    {
+
+                        double cell_val = Convert.ToDouble(cell.Value);
+
+                        if (cell_val >= low_limit && cell_val <= high_limit)
+                        {
+                            masked_row.Cells[count].Value = cell.Value;
+                        }
+                        else
+                        {
+                            masked_row.Cells[count].Value = "###" + cell.Value;
+                        }
+                    }
+                    catch { 
+                    }
+
+                    count++;
+                }
+
+                return masked_row;
+            }
+            catch
+            {
+                return row;
+            }
+        }
+
 
     }
 }

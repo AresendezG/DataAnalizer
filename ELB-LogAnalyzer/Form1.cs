@@ -162,6 +162,7 @@ namespace ELB_LogAnalyzer
                 loop_1++;
             }
 
+            DGrid1.RowHeadersVisible = false;
             // return test_array;
         }
 
@@ -249,12 +250,6 @@ namespace ELB_LogAnalyzer
         }
 
 
-        /*Processing data stuff*/
-
-        private void ParseFile(string FilePath)
-        {
-
-        }
 
         private void copygrid_btn_Click(object sender, EventArgs e)
         {
@@ -308,6 +303,31 @@ namespace ELB_LogAnalyzer
         private void ExitBtn_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void maskfails_btn_Click(object sender, EventArgs e)
+        {
+            DialogResult USER = MessageBox.Show("Do you want to Highlight Failing Results?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            
+
+            if (USER == DialogResult.Yes)
+            {
+                int count = 0;
+                foreach (DataGridViewRow row in DGrid1.Rows)
+                {
+                    DataGridViewRow masked_row = DataFncs.mask_failures(row);
+                    try
+                    {
+                        DGrid1.Rows.RemoveAt(count);
+                        DGrid1.Rows.Insert(count, masked_row);
+                        count++;
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
         }
     }
 }
